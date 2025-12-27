@@ -17,6 +17,6 @@ int helper(int*arr, int n){
     return sum;
 }
 int main(){
-    int arr[3]={5,10,15};
-    cout<<helper(arr,3);
+    int arr[5]={5,10,15,20,12};
+    cout<<helper(arr,5);
 }
