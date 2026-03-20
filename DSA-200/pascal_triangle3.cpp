@@ -6,7 +6,7 @@ public:
         vector<vector<int>>ans;
         vector<int>subset;
        for(int i=0;i<n;i++){
-        subset.clear();
+        subset.clear() ; 
         for(int j=0;j<=i;j++){
             if(j==0||j==i) subset.push_back(1);
             else{
