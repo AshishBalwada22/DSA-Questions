@@ -127,6 +127,7 @@ using namespace std;
 vector<vector<char>>matrix;
 vector<vector<int>>visited;
 vector<vector<int>>dist;
+vector<vector<state>>parent;
 int n,m;
 
 bool is_valid(int x, int y){
@@ -153,7 +154,8 @@ vector<state> neighbours(state cur){
 
 void bfs(state st){
     visited = vector<vector<int>>(n,vector<int>(m,0));
-    dist = vector<vector<int>>(n,vector<int>(m,INF));  
+    dist = vector<vector<int>>(n,vector<int>(m,INF)); 
+    parent = vector<vector<state>>(n,vector<state>(m,{-1,-1})); 
     queue<state>q;
     q.push(st);
     dist[st.F][st.S]=0;
@@ -168,6 +170,7 @@ void bfs(state st){
             if(!visited[neigh.F][neigh.S] && dist[cur.F][cur.S] + 1 < dist[neigh.F][neigh.S]){
                 q.push(neigh);
                 dist[neigh.F][neigh.S] = dist[cur.F][cur.S] + 1;
+                parent[neigh.F][neigh.S] = {cur.F,cur.S};
             }
         }
     }
@@ -189,6 +192,41 @@ void solve(){
     }
     
     bfs(st);
-
+    if(dist[en.F][en.S]==INF) cout<<"NO"<<endl;
+    else cout<<"YES"<<endl;
     cout<<dist[en.F][en.S]<<endl;
+    vector<state> path;
+    state cur = en;
+    while(cur!=make_pair(-1,-1)){
+        path.push_back(cur);
+        cur=parent[cur.F][cur.S];
+    }
+    reverse(path.begin(),path.end());
+
+    map<string,char>m; // store diff (x1-x2,y1-y2) => direction 
+    m.insert({"0,1",'L'});
+    m.insert({"0,-1",'R'});
+    m.insert({"-1,0",'D'});
+    m.insert({"1,0",'U'});
+    string ans="";
+    for(int i=0;i<path.size()-1;i++){
+        int x1=path[i].F;
+        int x2=path[i+1].F;
+        int y1=path[i].S;
+        int y2=path[i+1].S;
+        int xdiff = x1-x2;
+        int ydiff = y1-y2;
+        string cord = to_string(xdiff)+","+to_string(ydiff);
+        ans.push_back(m[cord]);
+    }
+    cout<<ans;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);cout.tie(0);
+    int t=1;
+    while(t--){
+        solve();
+    }
 }
