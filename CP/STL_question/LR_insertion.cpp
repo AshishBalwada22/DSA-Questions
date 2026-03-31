@@ -9,6 +9,7 @@ void solve(){
     string s;
     cin>>s;
     deque<int> dq1,dq2;
+    // cutting array technique, taking middle element
     int num = 0;
     for(char ch:s){
       if(ch=='L'){
