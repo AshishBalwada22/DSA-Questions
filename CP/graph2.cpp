@@ -57,5 +57,5 @@ void solve(){
     }
 }
 
-// Dijkstra Algorithm
+// Dijkstra Algorithm - find shortest path from source to all other nodes in the graph
 
