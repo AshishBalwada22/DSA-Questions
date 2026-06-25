@@ -148,3 +148,88 @@ void solve(){
 }
 
 
+4) How many different dfs traversal possible in a tree
+
+- for every node, we can traverse its children in any order, so number of ways are (number of child)!
+- same for further level
+
+ans = product of (number of child)! for every node
+
+Need to find different dfs traversal for every node?
+
+first calculate for root node, then for every child node
+same contribution technique - if node x is a root, and node y is a child
+if we calculate ans for node x, then for node y, it will be 
+ans[y] = ans[x] / ( (child[x])! * (child[y])! ) 
+ans[y] = ans[y] * (child[x]-1)! * (child[y]+1)!
+
+
+vector<vector<int>>edges;
+vector<int>child; // calculate number of childs in each node
+vector<int>ans;
+int n;
+int fact[1000];
+
+void precompute(){
+    fact[0]=1;
+    fact[1]=1;
+    for(int i=2;i<1000;i++){
+        fact[i]=i*fact[i-1];
+    }
+}
+void dfs1(int cur,int par){ // calculate number of child for every node as 1 as root node
+    child[cur]=0;
+    for(auto nxt:edges[cur]){
+        if(nxt!=par){
+            dfs1(nxt,cur);
+            child[cur]++;
+        }
+    }
+}
+
+void dfs2(int cur, int par, int curans){
+    ans[cur]=curans;
+    for(auto nxt:edges[cur]){
+        if(nxt!=par){
+            curans /= fact[child[cur]];
+            curans /= fact[child[nxt]];
+            child[cur]--;
+            child[nxt]++;
+            curans *= fact[child[cur]];
+            curans *= fact[child[nxt]];
+            dfs2(nxt,cur,curans);
+            curans /= fact[child[cur]];
+            curans /= fact[child[nxt]];
+            child[cur]++;
+            child[nxt]--;
+            curans *= fact[child[cur]];
+            curans *= fact[child[nxt]];
+        }
+    }
+}
+
+void solve(){
+    int edge;
+    cin>>n>>edge;
+    edges.resize(n+1);
+    child.resize(n+1,0);
+    ans.resize(n+1,0);
+    for(int i=0;i<edge;i++){
+        int a,b;
+        cin>>a>>b;
+        edges[a].push_back(b);
+        edges[b].push_back(a);
+    }    
+    precompute();
+    dfs1(1,0);
+    int anss = 1;
+    for(int i=1;i<=n;i++){
+        anss*=fact[child[i]];
+    }
+    dfs2(1,0,anss);
+    for(int i=1;i<=n;i++){
+        cout<<ans[i]<<" ";
+    }
+}
+
+
