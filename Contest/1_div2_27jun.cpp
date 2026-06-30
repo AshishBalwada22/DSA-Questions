@@ -39,3 +39,50 @@ signed main(){
         solve();
     }
 }
+
+
+2) https://codeforces.com/contest/2240/problem/B
+
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long int ll;
+ll mod = 998244353;
+
+ll power(ll base, ll exp){
+    ll ans = 1;
+    while(exp>0){
+        if(exp%2==1){
+            ans=(ans*base)%mod;
+        }
+        base=(base*base)%mod;
+        exp=exp/2;
+    }
+    return ans;
+}
+void solve(){
+    ll n,m,r,c;
+    cin>>n>>m>>r>>c;
+    /*
+    logic - prefix xor sum
+    if we need to calculate xor sum till p[r][c]
+    p[r][c] = A[r][c]^p[r-1][c]^p[r][c-1]^p[r-1][c-1]
+    // [r-1][c-1] added two times so, xor with [r-1][c-1] again as we know x^x = 0
+    number of ways = 2^(n*m) , either choose 0 or 1
+    if A[r][c] = 0, p[r][c] = p[r-1][c]^p[r][c-1]^p[r-1][c-1], as x^0=x
+    number of free choice = (r-1)*m + n*(c-1) - (r-1)*(c-1)
+    number of ways = 2 ^ (number of free choice)
+    */
+    ll exp = (r-1)*m + n*(c-1) - (r-1)*(c-1);
+    cout<<power(2,exp)<<endl;
+}
+
+signed main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);cout.tie(0);
+    int t;
+    cin>>t;
+    while(t--){
+        solve();
+    }
+}
