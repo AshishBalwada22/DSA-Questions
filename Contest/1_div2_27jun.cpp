@@ -86,3 +86,6 @@ signed main(){
         solve();
     }
 }
+
+
+3) https://codeforces.com/contest/2240/problem/C
